@@ -1,11 +1,8 @@
-import 'dart:convert';
 
-import 'package:ebook/ForgotPassword.dart';
-import 'package:ebook/Registration.dart';
-import 'package:ebook/TicketType.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'ForgotPassword.dart';
+import 'Registration.dart';
+import 'TicketType.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -19,8 +16,6 @@ class LoginForm extends StatefulWidget {
 //For stateful widget we need a state class
 
 class LoginScreenState extends State<LoginForm> {
-
-  bool _isLoading = false;
 
   final _formKey = GlobalKey<FormState>();
   bool showPassword = true;
@@ -144,7 +139,7 @@ class LoginScreenState extends State<LoginForm> {
         obscureText: showPassword,
         decoration: InputDecoration(
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
-          prefixIcon: Icon(Icons.security_sharp),
+          prefixIcon: Icon(Icons.lock),
           hintText: "Password",
           fillColor: Colors.white,
           filled: true,
@@ -252,11 +247,10 @@ class LoginScreenState extends State<LoginForm> {
               builder: (context) {
                 return AlertDialog(
                   title: const Text('Confirm your login detail'),
-                  content: Text("Mail ID : $mail \n Password : $pass"),
+                  content: Text("Mail ID : $mail \nPassword : $pass"),
                   actions: <Widget>[
                     TextButton(
                         style: ElevatedButton.styleFrom(
-
                           backgroundColor: Color(0xFF2A4083),
                         ),
                         onPressed: () {

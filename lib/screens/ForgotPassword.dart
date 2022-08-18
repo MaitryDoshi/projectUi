@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ebook/OtpGen.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+
+import 'OtpGen.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({Key? key}) : super(key: key);

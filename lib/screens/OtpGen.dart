@@ -1,8 +1,8 @@
 import 'dart:async';
-
-import 'Passwordchange.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'Passwordchange.dart';
 
 class OtpGen extends StatefulWidget {
   const OtpGen({Key? key}) : super(key: key);
