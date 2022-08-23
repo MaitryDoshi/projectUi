@@ -1,4 +1,7 @@
+import 'package:ebook/screens/GeneralInspection.dart';
 import 'package:flutter/material.dart';
+
+import 'GenInspection.dart';
 
 class TicketList extends StatefulWidget {
   const TicketList({Key? key}) : super(key: key);
@@ -22,7 +25,6 @@ class _TicketListState extends State<TicketList> {
       ),
       body: Center(
         child: Container(
-          padding: EdgeInsets.all(10.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -84,7 +86,49 @@ class _TicketListState extends State<TicketList> {
 
   //Listview
   Widget listingview() {
-    return ListView(
-
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Container(
+            height: 200,
+            child: Row(
+              children: [
+                VerticalDivider(
+                  thickness: 2,
+                  color: Colors.blue,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextButton(child: Text("Nitu Sharma-", style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 18),textAlign: TextAlign.left,),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) => const GenInspection()));},),
+                          Padding(padding: EdgeInsets.all(2.0)),
+                          Text("Meter Reading        -    Transmission", style: TextStyle(color: Colors.black, fontSize: 16),textAlign: TextAlign.left,),
+                          Padding(padding: EdgeInsets.all(2.0)),
+                          Text("Purpose                   -    REHABILITATION", style: TextStyle(color: Colors.black, fontSize: 16),textAlign: TextAlign.left,),
+                          Padding(padding: EdgeInsets.all(2.0)),
+                          Text("Location                  - ", style: TextStyle(color: Colors.black, fontSize: 16),textAlign: TextAlign.left,),
+                          Padding(padding: EdgeInsets.all(2.0)),
+                          Text("Seq Req                   -    2022-08-23", style: TextStyle(color: Colors.black, fontSize: 16),textAlign: TextAlign.left,),
+                          Padding(padding: EdgeInsets.all(2.0)),
+                          Text("Ticket Status          - ", style: TextStyle(color: Colors.black, fontSize: 16),textAlign: TextAlign.left,),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+            ]),
+          ),
+        ]),
     );
+  }
 }
