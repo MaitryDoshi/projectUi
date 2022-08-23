@@ -1,5 +1,8 @@
+import 'package:ebook/screens/Imagepicker.dart';
 import 'package:ebook/screens/SplashScreen.dart';
+import 'package:ebook/screens/ticketList.dart';
 import 'package:flutter/material.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -23,10 +26,10 @@ class MyAppState extends State<MyApp>{
       debugShowCheckedModeBanner: false,
       title: 'Login Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.deepPurple,
       ),
       home: Scaffold(
-        body: SplashScreen(),
+        body: TicketList(),
       ),
     );
   }
