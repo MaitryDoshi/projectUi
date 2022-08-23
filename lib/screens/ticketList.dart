@@ -71,6 +71,7 @@ class _TicketListState extends State<TicketList> {
               ),
               divider(),
               listingview(),
+              horizontaldiv(),
             ],
           ),
         ),
@@ -87,10 +88,11 @@ class _TicketListState extends State<TicketList> {
   //Listview
   Widget listingview() {
     return Container(
+      padding: EdgeInsets.only(left: 10.0),
       child: Column(
         children: <Widget>[
           Container(
-            height: 200,
+            height: 180,
             child: Row(
               children: [
                 VerticalDivider(
@@ -131,4 +133,13 @@ class _TicketListState extends State<TicketList> {
         ]),
     );
   }
+
+  //horizontaldivider
+  Widget horizontaldiv(){
+    return Divider(
+      thickness: 2,
+    );
+  }
 }
+
+
