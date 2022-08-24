@@ -1,5 +1,6 @@
 import 'package:ebook/screens/Imagepicker.dart';
 import 'package:ebook/screens/SplashScreen.dart';
+import 'package:ebook/screens/bottomNavigation.dart';
 import 'package:ebook/screens/ticketList.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +30,7 @@ class MyAppState extends State<MyApp>{
         primarySwatch: Colors.deepPurple,
       ),
       home: Scaffold(
-        body: TicketList(),
+        body: BottomNavigation(),
       ),
     );
   }
