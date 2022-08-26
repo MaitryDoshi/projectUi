@@ -1,3 +1,5 @@
+import 'package:ebook/screens/GenInspection.dart';
+import 'package:ebook/screens/GeneralInspection.dart';
 import 'package:ebook/screens/Imagepicker.dart';
 import 'package:ebook/screens/SplashScreen.dart';
 import 'package:ebook/screens/bottomNavigation.dart';
@@ -30,7 +32,7 @@ class MyAppState extends State<MyApp>{
         primarySwatch: Colors.deepPurple,
       ),
       home: Scaffold(
-        body: BottomNavigation(),
+        body: GenInspection(),
       ),
     );
   }
