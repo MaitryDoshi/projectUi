@@ -68,7 +68,8 @@ class TicketTypeState extends State<TicketType> {
         ],
         centerTitle: true,
       ),
-      body: Container(
+      body: SingleChildScrollView(
+        child: Container(
           padding: EdgeInsets.all(10.0),
           child: Column(
             children: <Widget>[
@@ -76,7 +77,7 @@ class TicketTypeState extends State<TicketType> {
                 leading: Icon(Icons.design_services_sharp),
                 title: Text("PRE-DELIVERY"),
                 trailing: Icon(Icons.navigate_next),
-              onTap: () {
+                onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => Initcommissionreg()),);},),
               Divider(thickness: 1),
               ListTile(
@@ -139,6 +140,7 @@ class TicketTypeState extends State<TicketType> {
             ],
           ),
         ),
+      ),
     );
   }
 

@@ -1,8 +1,14 @@
+import 'package:ebook/screens/ForgotPassword.dart';
 import 'package:ebook/screens/GenInspection.dart';
 import 'package:ebook/screens/GeneralInspection.dart';
 import 'package:ebook/screens/Imagepicker.dart';
+import 'package:ebook/screens/OtpGen.dart';
+import 'package:ebook/screens/Passwordchange.dart';
+import 'package:ebook/screens/Registration.dart';
 import 'package:ebook/screens/SplashScreen.dart';
+import 'package:ebook/screens/TicketType.dart';
 import 'package:ebook/screens/bottomNavigation.dart';
+import 'package:ebook/screens/home.dart';
 import 'package:ebook/screens/ticketList.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +38,7 @@ class MyAppState extends State<MyApp>{
         primarySwatch: Colors.deepPurple,
       ),
       home: Scaffold(
-        body: GenInspection(),
+        body: Passwordchange(),
       ),
     );
   }
