@@ -2,6 +2,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:smart_select/smart_select.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class Registration extends StatefulWidget {
