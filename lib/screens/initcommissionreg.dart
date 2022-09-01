@@ -3,15 +3,20 @@
 
 //import 'dart:io';
 
+// ignore_for_file: unnecessary_null_comparison
+
 //import 'dart:io';
-
-import 'dart:io';
-
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:ebook/model/init_commissioning.dart';
+import 'package:ebook/screens/UkPage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:toast/toast.dart';
+
+import '../db/dbhelper.dart';
 
 class Initcommissionreg extends StatefulWidget {
   const Initcommissionreg({Key? key}) : super(key: key);
@@ -32,7 +37,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
 
   String hw = "Hello world";
 
-  List<String> bv = ['private', 'government', 'semi-gov', 'others'];
+  List<String> bv = ['Majorly Affected', 'lightly Affected'];
   List<String> sec = ['IT', 'HR', 'Account', 'Support'];
   List<String> role = ['CEO', 'CIO', 'Vice President', 'Manager', 'Assistant Manager','Accountant' ];
   List<String> designation = ['Administration', 'Developer', 'Tester', 'QA', 'DBA' ];
@@ -44,43 +49,60 @@ class InitcommissionregState extends State<Initcommissionreg> {
   ];
   List<String> office = ['Bangalore', 'Pune', 'Chennai', 'Ahmedabad'];
 
-  //final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _mailController = TextEditingController();
-  // final TextEditingController _orgController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _bdateController = TextEditingController();
+  Future<SharedPreferences> _pre = SharedPreferences.getInstance();
 
   final ImagePicker imagePicker = ImagePicker();
   List<XFile>? imageFileList = [];
 
   var imageFile;
 
+  final _formKey = new GlobalKey<FormState>();
+
+  String equpStatusHolder = '';
+  String sysAffected = '';
+
+  final _modelcontroller = TextEditingController();
+  final _HourMeterReading = TextEditingController();
+  final _equSlNumber = TextEditingController();
+  final _kmReading = TextEditingController();
+  final _dod = TextEditingController();
+  final _remarks = TextEditingController();
+  //final _images = TextEditingController();
+  final _address = TextEditingController();
+  final _pincode = TextEditingController();
+  final _city = TextEditingController();
+  final _state = TextEditingController();
+  final _nearbystation = TextEditingController();
+  final _name = TextEditingController();
+  final _phone = TextEditingController();
+
+  late final initcommission;
+  var dbHelper;
+
+  List<InitCommissioning> datalist = [];
+  bool fetching = true;
+
   @override
   void initState() {
-    _bdateController.text = "";
-    _dateController.text = "";
-    passwordFocusNode = FocusNode();
-    conPasswordFocusNode = FocusNode();
     super.initState();
+    initcommission = InitCommissioning;
+    dbHelper = DbHelper();
   }
 
   @override
   void dispose() {
     super.dispose();
-    passwordFocusNode?.dispose();
-    conPasswordFocusNode?.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    //var _isHidden;
-
     return Material(
         child: Container(
           padding: const EdgeInsets.all(10.0),
           constraints: const BoxConstraints.expand(),
           color: Colors.greenAccent,
           child: Form(
+            key: _formKey,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -153,7 +175,15 @@ class InitcommissionregState extends State<Initcommissionreg> {
     return Container(
       padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
       child: TextFormField(
-        controller: _mailController,
+        controller: _modelcontroller,
+        validator: (val) {
+          if(val == null || val.isEmpty){
+            return 'Please enter model';
+          }
+          else{
+            return null;
+          }
+        },
         cursorColor: Colors.red,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
@@ -165,7 +195,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.white70)),
-          labelText: "* Model",
+          hintText: "* Model",
           fillColor: Colors.white,
           filled: true,
         ),
@@ -178,7 +208,15 @@ class InitcommissionregState extends State<Initcommissionreg> {
     return Container(
       padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
       child: TextFormField(
-        controller: _mailController,
+        controller: _equSlNumber,
+        validator: (val) {
+          if(val == null || val.isEmpty){
+            return 'Please enter Equipment number';
+          }
+          else{
+            return null;
+          }
+        },
         cursorColor: Colors.red,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
@@ -190,7 +228,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.white70)),
-          labelText: "* Manual Equipment SL Number",
+          hintText: "* Manual Equipment SL Number",
           fillColor: Colors.white,
           filled: true,
         ),
@@ -203,7 +241,15 @@ class InitcommissionregState extends State<Initcommissionreg> {
     return Container(
       padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
       child: TextFormField(
-        controller: _mailController,
+        controller: _HourMeterReading,
+        validator: (val) {
+          if(val == null || val.isEmpty){
+            return 'Please enter Hour meter reading';
+          }
+          else{
+            return null;
+          }
+        },
         cursorColor: Colors.red,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
@@ -215,7 +261,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.white70)),
-          labelText: "* Hour Meter Reading",
+          hintText: "* Hour Meter Reading",
           fillColor: Colors.white,
           filled: true,
         ),
@@ -228,7 +274,15 @@ class InitcommissionregState extends State<Initcommissionreg> {
     return Container(
       padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
       child: TextFormField(
-        controller: _mailController,
+        controller: _kmReading,
+        validator: (val) {
+          if(val == null || val.isEmpty){
+            return 'Please enter Kilometer reading';
+          }
+          else{
+            return null;
+          }
+        },
         cursorColor: Colors.red,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
@@ -240,7 +294,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.white70)),
-          labelText: "* Kilometer Reading (KM)",
+          hintText: "* Kilometer Reading (KM)",
           fillColor: Colors.white,
           filled: true,
         ),
@@ -254,10 +308,22 @@ class InitcommissionregState extends State<Initcommissionreg> {
         padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
         child: Form(
             child: SingleChildScrollView(
-                child: DropdownSearch(
+                child: DropdownSearch<String>(
           items: bv,
-          onChanged: (bv) {
-            print(" Business Vertical : $bv");
+          popupProps: PopupProps.menu(
+            showSelectedItems: true,
+          ),
+          onChanged: print,
+          validator: (String? bv) {
+            if(bv != null){
+              equpStatusHolder = bv;
+              return equpStatusHolder;
+            }
+            else if(bv == null){
+              return "Please choose options";
+            }
+            else
+              return null;
           },
           dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
@@ -270,7 +336,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                   borderSide: BorderSide(color: Colors.white70)),
-              labelText: "* Equipment Status",
+              hintText: "* Equipment Status",
               fillColor: Colors.white,
               filled: true,
             ),
@@ -283,7 +349,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
     return Container(
         padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
         child: TextField(
-          controller: _bdateController,
+          controller: _dod,
           readOnly: true,
           onTap: () {},
           decoration: InputDecoration(
@@ -298,7 +364,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
                 if (picked != null) {
                   String selectedDate = DateFormat('dd-MM-yyyy').format(picked);
                   setState(() {
-                    _bdateController.text = selectedDate;
+                    _dod.text = selectedDate;
                   });
                 }
               },
@@ -312,7 +378,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
                 borderSide: BorderSide(color: Colors.white70)),
-            labelText: "* Date of Delivery",
+            hintText: "* Date of Delivery",
             fillColor: Colors.white,
             filled: true,
           ),
@@ -326,10 +392,22 @@ class InitcommissionregState extends State<Initcommissionreg> {
         padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
         child: Form(
             child: SingleChildScrollView(
-                child: DropdownSearch(
+                child: DropdownSearch<String>(
                   items: bv,
-                  onChanged: (bv) {
-                    print(" Business Vertical : $bv");
+                  popupProps: PopupProps.menu(
+                    showSelectedItems: true,
+                  ),
+                  onChanged: print,
+                  validator: (String? bv) {
+                    if(bv != null){
+                      sysAffected = bv;
+                      return sysAffected;
+                    }
+                    else if(bv == null){
+                      return "Please choose options";
+                    }
+                    else
+                      return null;
                   },
                   dropdownDecoratorProps: DropDownDecoratorProps(
                     dropdownSearchDecoration: InputDecoration(
@@ -342,7 +420,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide: BorderSide(color: Colors.white70)),
-                      labelText: "* System Affected",
+                      hintText: "* System Affected",
                       fillColor: Colors.white,
                       filled: true,
                     ),
@@ -358,7 +436,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
     return Container(
       padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
       child: TextFormField(
-        controller: _mailController,
+        controller: _remarks,
         cursorColor: Colors.red,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
@@ -370,7 +448,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.white70)),
-          labelText: "* Remarks / Problems",
+          hintText: "* Remarks / Problems",
           fillColor: Colors.white,
           filled: true,
         ),
@@ -406,6 +484,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
               Container(
                 padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
                 child: TextFormField(
+                  //controller: _images,
                   cursorColor: Colors.red,
                   decoration: InputDecoration(
                     suffixIcon: Icon(Icons.camera_alt),
@@ -418,7 +497,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(color: Colors.white70)),
-                    labelText: "* Select Files or Photos",
+                    hintText: "* Select Files or Photos",
                     fillColor: Colors.white,
                     filled: true,),
                   onTap: () {
@@ -446,7 +525,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
           crossAxisCount: 3,
           children:
           List.generate(imageFileList!.length, (index) {
-            return Container(padding: EdgeInsets.all(4.0),child: Image.file(File(imageFileList![index].path),
+            return Container(padding: EdgeInsets.all(4.0),child: Image.file(imageFile(imageFileList![index].path),
               fit: BoxFit.cover,));
           }),
         )
@@ -474,7 +553,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
     return Container(
       padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
       child: TextFormField(
-        controller: _mailController,
+        controller: _address,
         cursorColor: Colors.red,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
@@ -486,7 +565,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.white70)),
-          labelText: "* Address",
+          hintText: "* Address",
           fillColor: Colors.white,
           filled: true,
         ),
@@ -499,7 +578,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
     return Container(
       padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
       child: TextFormField(
-        controller: _mailController,
+        controller: _pincode,
         cursorColor: Colors.red,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
@@ -511,7 +590,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.white70)),
-          labelText: "* Pincode of Equipment Location",
+          hintText: "* Pincode of Equipment Location",
           fillColor: Colors.white,
           filled: true,
         ),
@@ -524,7 +603,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
     return Container(
       padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
       child: TextFormField(
-        controller: _mailController,
+        controller: _city,
         cursorColor: Colors.red,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
@@ -536,7 +615,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.white70)),
-          labelText: "* City",
+          hintText: "* City",
           fillColor: Colors.white,
           filled: true,
         ),
@@ -549,7 +628,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
     return Container(
       padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
       child: TextFormField(
-        controller: _mailController,
+        controller: _state,
         cursorColor: Colors.red,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
@@ -561,7 +640,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.white70)),
-          labelText: "* State",
+          hintText: "* State",
           fillColor: Colors.white,
           filled: true,
         ),
@@ -574,7 +653,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
     return Container(
       padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
       child: TextFormField(
-        controller: _mailController,
+        controller: _nearbystation,
         cursorColor: Colors.red,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
@@ -586,7 +665,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.white70)),
-          labelText: "* Nearest Railway Station",
+          hintText: "* Nearest Railway Station",
           fillColor: Colors.white,
           filled: true,
         ),
@@ -614,7 +693,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
     return Container(
       padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
       child: TextFormField(
-        controller: _mailController,
+        controller: _name,
         cursorColor: Colors.red,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
@@ -626,7 +705,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.white70)),
-          labelText: "* Name",
+          hintText: "* Name",
           fillColor: Colors.white,
           filled: true,
         ),
@@ -653,10 +732,11 @@ class InitcommissionregState extends State<Initcommissionreg> {
     return Container(
       padding: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
       child: IntlPhoneField(
+        controller: _phone,
           decoration: InputDecoration(
             fillColor: Colors.white,
             filled: true,
-            labelText: 'Phone NUmber',
+            hintText: 'Phone NUmber',
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
@@ -673,6 +753,7 @@ class InitcommissionregState extends State<Initcommissionreg> {
 
   // registration a button
   Widget subButton() {
+   // final data = initCommissionData[index];
     return Container(
       padding: EdgeInsets.only(left: 10.0, right: 10.0),
       child: Row(
@@ -687,7 +768,10 @@ class InitcommissionregState extends State<Initcommissionreg> {
                   backgroundColor: Color.fromRGBO(33, 110, 243, 1),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0))),
-              onPressed: () {},
+              onPressed: () {
+                savedata();
+                //showData();
+                },
               child: const Text(
                 "Submit",
                 style: TextStyle(fontFamily: 'Sfpro', fontSize: 14),
@@ -699,16 +783,102 @@ class InitcommissionregState extends State<Initcommissionreg> {
     );
   }
 
-  /*selectImage() async {
-    final List<XFile?> selectedImages = (await imagePicker.pickMultiImage())!.cast<XFile>();
-     setState(() {
-       imagesFileList = selectImage();
-     });
+  savedata() async {
+    String model = _modelcontroller.text;
+    String equnumber = _equSlNumber.text;
+    String hrmeter = _HourMeterReading.text;
+    String kmReading = _kmReading.text;
+    String equstatus = equpStatusHolder;
+    String dod = _dod.text;
+    String sysAffect = sysAffected;
+    String remarks = _remarks.text;
+    //String images = _images.text;
+    String address = _address.text;
+    String pincode = _pincode.text;
+    String city = _city.text;
+    String state = _state.text;
+    String nearbyStation = _nearbystation.text;
+    String name = _name.text;
+    String phone = _phone.text;
+
+    if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
+        InitCommissioning initCommissioning = InitCommissioning(model, hrmeter, equnumber, kmReading, equstatus, dod, sysAffect, remarks, address, pincode, city, state, nearbyStation, name, phone);
+        await dbHelper.saveData(initCommissioning).then((userData) {
+          print('model number : $model \nEquipment number : $equnumber \nHour meter reading number : $hrmeter \nkilometer reading : $kmReading \nEquipment status : $equstatus \nDate of delivery : $dod \nSystem affected : $sysAffect \nRemarks : $remarks \nAddress : $address \nPincode : $pincode \nCity : $city \nState : $state \nNear By Station : $nearbyStation \nName of Incharge : $name \nPhone number : $phone');
+          print("Data saved!!");
+        }).catchError((error) {
+          print(error);
+        });
+    }
+  }
+/*
+  showData() async{
+    String model = _modelcontroller.text;
+    String equnumber = _equSlNumber.text;
+    String hrmeter = _HourMeterReading.text;
+    String kmReading = _kmReading.text;
+    String equstatus = equpStatusHolder;
+    String dod = _dod.text;
+    String sysAffect = sysAffected;
+    String remarks = _remarks.text;
+    //String images = _images.text;
+    String address = _address.text;
+    String pincode = _pincode.text;
+    String city = _city.text;
+    String state = _state.text;
+    String nearbyStation = _nearbystation.text;
+    String name = _name.text;
+    String phone = _phone.text;
+
+    if(model.isEmpty){
+      print("Model field is empty");
+    }
+    else if(equnumber.isEmpty){
+      print("equipment field is empty");
+    }
+    else if(hrmeter.isEmpty){
+      print("Hour meter field is empty");
+    }
+    if(kmReading.isEmpty){
+      print("Kilometer field is empty");
+    }
+    else{
+      await dbHelper.getData(model, hrmeter, equnumber, kmReading, equstatus, dod, sysAffect, remarks, address, pincode, city, state, nearbyStation, name, phone).then((userData) {
+        if(userData != null) {
+          setSP(userData).whenComplete(() => Navigator.pushAndRemoveUntil(context,
+              MaterialPageRoute(builder: (_) => UkPage()), (
+                  Route<dynamic> route) => false));
+          print("$model \n$equnumber \n$hrmeter \n$kmReading \n$equstatus \n$dod \n$sysAffect \n$remarks \n$address \n$pincode \n$city \n$state \n$nearbyStation \n$name \n$phone");
+        }
+      });
+    }
   }*/
+
+  Future setSP(InitCommissioning initCommissioning) async{
+    final SharedPreferences sp = await _pre;
+
+    sp.setString("model", initCommissioning.model);
+    sp.setString("kmreading", initCommissioning.kmreading);
+    sp.setString("hours", initCommissioning.hours);
+    sp.setString("equnumber", initCommissioning.equnumber);
+    sp.setString("equstatus", initCommissioning.equstatus);
+    sp.setString("dod", initCommissioning.dod);
+    sp.setString("sysAffect", initCommissioning.sysAffect);
+    sp.setString("remarks", initCommissioning.remarks);
+    //sp.setString("images", initCommissioning.images);
+    sp.setString("address", initCommissioning.address);
+    sp.setString("pincode", initCommissioning.pincode);
+    sp.setString("city", initCommissioning.city);
+    sp.setString("state", initCommissioning.state);
+    sp.setString("nearbyStation", initCommissioning.nearbyStation);
+    sp.setString("name", initCommissioning.name);
+    sp.setString("phone", initCommissioning.phone);
+  }
 
   void selectImages() async {
     final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
-      imageFileList!.addAll(selectedImages!);
+    imageFileList!.addAll(selectedImages!);
     print("Image List Length:" + imageFileList!.length.toString());
     setState((){
       imageFileList;

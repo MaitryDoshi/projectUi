@@ -1,14 +1,15 @@
-import 'package:ebook/Breakdown.dart';
-import 'package:ebook/DesignModification.dart';
-import 'package:ebook/ErectionCommission.dart';
-import 'package:ebook/PeriodicMaintenance.dart';
-import 'package:ebook/PrevantiveMaintenance.dart';
-import 'package:ebook/ServiceforSparePurchase.dart';
-import 'package:ebook/Subassembly.dart';
-import 'package:ebook/initcommissionreg.dart';
+
 import 'package:flutter/material.dart';
 
+import 'Breakdown.dart';
+import 'DesignModification.dart';
+import 'ErectionCommission.dart';
 import 'GeneralInspection.dart';
+import 'PeriodicMaintenance.dart';
+import 'PrevantiveMaintenance.dart';
+import 'ServiceforSparePurchase.dart';
+import 'Subassembly.dart';
+import 'initcommissionreg.dart';
 
 class TicketType extends StatefulWidget {
   const TicketType({Key? key}) : super(key: key);

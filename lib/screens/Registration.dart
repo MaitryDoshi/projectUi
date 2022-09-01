@@ -533,7 +533,7 @@ class RegistrationState extends State<Registration> {
         children: [
           SizedBox(
             height: 50,
-            width: 360,
+            width: 350,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromRGBO(33, 110, 243, 1),
